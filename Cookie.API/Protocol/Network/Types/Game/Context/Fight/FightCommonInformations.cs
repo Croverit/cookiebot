@@ -7,7 +7,7 @@ namespace Cookie.API.Protocol.Network.Types.Game.Context.Fight
     {
         public const ushort ProtocolId = 43;
 
-        public FightCommonInformations(short fightId, byte fightType, List<FightTeamInformations> fightTeams,
+        public FightCommonInformations(int fightId, byte fightType, List<FightTeamInformations> fightTeams,
             List<ushort> fightTeamsPositions, List<FightOptionsInformations> fightTeamsOptions)
         {
             FightId = fightId;
@@ -22,7 +22,7 @@ namespace Cookie.API.Protocol.Network.Types.Game.Context.Fight
         }
 
         public override ushort TypeID => ProtocolId;
-        public short FightId { get; set; }
+        public int FightId { get; set; }
         public byte FightType { get; set; }
         public List<FightTeamInformations> FightTeams { get; set; }
         public List<ushort> FightTeamsPositions { get; set; }
@@ -30,7 +30,7 @@ namespace Cookie.API.Protocol.Network.Types.Game.Context.Fight
 
         public override void Serialize(IDataWriter writer)
         {
-            writer.WriteVarShort(FightId);
+            writer.WriteVarShort((short)FightId);
             writer.WriteByte(FightType);
             writer.WriteShort((short) FightTeams.Count);
             for (var fightTeamsIndex = 0; fightTeamsIndex < FightTeams.Count; fightTeamsIndex++)
@@ -56,7 +56,7 @@ namespace Cookie.API.Protocol.Network.Types.Game.Context.Fight
 
         public override void Deserialize(IDataReader reader)
         {
-            FightId = reader.ReadVarShort();
+            FightId = reader.ReadVarUhShort();
             FightType = reader.ReadByte();
             var fightTeamsCount = reader.ReadUShort();
             FightTeams = new List<FightTeamInformations>();
